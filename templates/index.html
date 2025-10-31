@@ -298,7 +298,11 @@
             {% for feature in feature_names %}
                 <label for="{{ feature }}">{{ feature }}</label>
                 <input type="number" id="{{ feature }}" name="{{ feature }}" step="any" required autocomplete="off" />
+                <p style="color: #aaa; font-size: 0.9em; margin-top: 4px; margin-bottom: 12px;">
+                    {{ feature_info[feature] }}
+                </p>
             {% endfor %}
+
             <button type="submit" aria-describedby="submit-info">Predict!</button>
             <div id="submit-info" style="display:none;">Submits your apple features to get a quality prediction.</div>
         </form>
