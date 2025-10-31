@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request 
 import joblib
 import numpy as np
 import os
@@ -11,6 +11,17 @@ scaler = joblib.load(os.path.join('models', 'scaler.pkl'))
 
 # Feature order must match model training
 numerical_features = ['Size', 'Weight', 'Sweetness', 'Crunchiness', 'Juiciness', 'Ripeness', 'Acidity']
+
+# Add likely units and typical ranges for better UI context
+feature_info = {
+    'Size': 'Unit: millimeters (mm) | Typical range: 60 – 90 mm',
+    'Weight': 'Unit: grams (g) | Typical range: 100 – 250 g',
+    'Sweetness': 'Scale: 1–10 or Brix (10–20 °Bx) | Higher = sweeter',
+    'Crunchiness': 'Scale: 1–10 | Higher = more crunchy',
+    'Juiciness': 'Scale: 1–10 | Higher = juicier',
+    'Ripeness': 'Scale: 1–10 | Higher = more ripe',
+    'Acidity': 'Unit: pH | Typical range: 3 – 5',
+}
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -31,7 +42,13 @@ def index():
         except Exception as e:
             prediction = f"Error: {e}"
 
-    return render_template('index.html', prediction=prediction, confidence=confidence, feature_names=numerical_features)
+    return render_template(
+        'index.html',
+        prediction=prediction,
+        confidence=confidence,
+        feature_names=numerical_features,
+        feature_info=feature_info
+    )
 
 if __name__ == "__main__":
     app.run(debug=True)
